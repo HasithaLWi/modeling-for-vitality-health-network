@@ -11,32 +11,36 @@
 ## 1. Executive Summary
 
 ### The Strategic Business Problem
-Vitality Health Network (VHN) faces severe penalties under the Centers for Medicare & Medicaid Services (CMS) Hospital Readmissions Reduction Program (HRRP), enacted under Section 3025 of the Affordable Care Act. VHN's historical diabetic 30-day readmission rate approached 18%, substantially exceeding national benchmarks (~11%-12%). This underperformance exposes VHN to maximum statutory CMS reimbursement penalties-a 3% clawback across all inpatient Medicare payments-costing millions annually while reflecting chronic post-discharge care deficits.
+Vitality Health Network (VHN) faces acute financial risk under the Centers for Medicare & Medicaid Services (CMS) Hospital Readmissions Reduction Program (HRRP), authorized by Section 3025 of the Affordable Care Act. VHN's historical diabetic 30-day readmission rate reached 18%, substantially exceeding national benchmarks (~11%-12%). This underperformance exposes VHN to maximum statutory CMS penalties-a 3% clawback across all inpatient Medicare payments-costing millions annually while reflecting chronic post-discharge care deficits.
 
 ### The Data Science Approach
-Responding to the Chief Medical Information Officer's (CMIO) directive-"Stop reporting on what happened. Tell us why it happened, and identify who is at risk next"-we executed an end-to-end data analytics initiative on a 10-year multi-center extract of 101,766 inpatient encounters across 130 hospitals. Utilizing Python, we eliminated legacy missingness, excluded deceased patients to avoid survival bias, and deployed an automated web scraper targeting the official ICD-9 ontology. We engineered and validated the **Vitality Complexity Index (VCI)**-a bedside risk index integrating Length of Stay (L), Acuity (A), Comorbidity Burden (C), and prior Emergency visits (E).
+Responding to the Chief Medical Information Officer's directive-"Stop reporting on what happened. Tell us why it happened, and identify who is at risk next"-we executed an end-to-end data analytics pipeline on a 10-year multi-center extract of 101,766 inpatient encounters across 130 hospitals. Utilizing Python, we sanitized legacy missingness, excluded non-surviving patients to avoid survival bias, and deployed an automated web scraper targeting the official ICD-9 ontology. We engineered and validated the **Vitality Complexity Index (VCI)**-a bedside risk algorithm integrating Length of Stay (L), Acuity (A), Comorbidity Burden (C), and prior Emergency visits (E).
 
 ### Key Empirical Findings
-1. **Target Class Imbalance:** Across 100,114 surviving encounters, the true 30-day readmission rate is 11.34% (11,357 encounters), with 35.77% readmitted after 30 days and 52.88% unreadmitted.
-2. **The Insulin Risk Marker:** Insulin monotherapy exhibits an elevated readmission rate of 13.24%, surpassing oral antidiabetic agents (10.53%) and diet-managed cohorts (9.83%), serving as a biological proxy for advanced disease.
-3. **Inpatient Medication Titration Volatility:** Inpatient dosage adjustments (`change == 'Ch'`) increased readmissions from 10.80% to 11.97%-a 10.8% relative risk increase reflecting metabolic instability.
-4. **Post-Acute Discharge Vulnerabilities:** Discharges to Skilled Nursing Facilities (SNFs) suffered a 15.01% readmission rate versus 9.27% for home discharges-a 61.9% higher relative risk.
+1. **Target Class Imbalance:** Across 100,114 surviving encounters, the true 30-day readmission rate is 11.34% (11,357 encounters), with 35.50% readmitted after 30 days and 53.15% unreadmitted.
+2. **The Insulin Risk Marker:** Insulin monotherapy exhibits an elevated readmission rate of 13.24%, surpassing oral antidiabetic agents (10.53%) and unmedicated cohorts (9.83%), serving as a biological proxy for advanced disease.
+3. **Inpatient Medication Titration Volatility:** Inpatient dosage adjustments (`change == 'Ch'`) increased readmissions from 10.80% to 11.97%-an 11% relative risk increase reflecting metabolic instability.
+4. **Post-Acute Discharge Vulnerabilities:** Discharges to Skilled Nursing Facilities (SNFs) suffered a 14.66% readmission rate versus 9.28% for routine home discharges-a 58% higher relative risk.
 5. **VCI Algorithmic Discrimination:** The VCI stratifies patients into Low Risk (<7; 8.81% readmission), Medium Risk (7-10; 11.41%), and High Risk (>10; 14.73%). High-Risk patients exhibit a **1.67x relative risk** (67.2% greater probability) of readmission versus Low-Risk patients (chi-square = 478.3, p < 0.0001).
 
 ### Primary Strategic Recommendation
-We recommend deploying the **VHN CareTransition Protocol** integrated into the EHR via the VCI. High-Risk VCI encounters represent 19.97% of volume but generate 25.92% of 30-day readmissions. VHN must deploy transitional care nurse navigators, mandatory clinical pharmacist bedside reconciliation, and 48-hour post-discharge telehealth outreach for all High-VCI patients. Reducing readmissions in this cohort by 25% will prevent 736 admissions annually, preserving $10.3 million in margin.
+We recommend deploying the **VHN CareTransition Protocol** integrated into the EHR via the VCI. High-Risk VCI encounters represent 19.97% of volume but generate 25.92% of 30-day readmissions. VHN must deploy transitional care nurse navigators, mandatory clinical pharmacist bedside reconciliation, and 48-hour post-discharge telehealth outreach for all High-VCI patients. Reducing readmissions in this cohort by 25% will prevent 74 readmissions per 10,000 encounters, preserving over $9.3 million in annual operating margin.
+
+---
 
 ## 2. Introduction & Business Context
 
 ### Macro Healthcare Transformation and HRRP Mechanics
-American healthcare is transitioning from retrospective fee-for-service reimbursement to value-based care. Under fee-for-service models, hospitals were reimbursed per admission, perversely rewarding complications. In value-based frameworks, operating margins depend directly on clinical outcome quality, longitudinal coordination, and acute recidivism avoidance.
+American healthcare is transitioning from retrospective fee-for-service reimbursement to value-based care. Under fee-for-service models, hospitals were reimbursed per admission, perversely rewarding clinical complications. In value-based frameworks, operating margins depend directly on clinical outcome quality, longitudinal care coordination, and acute recidivism avoidance.
 
 The CMS Hospital Readmissions Reduction Program (HRRP), mandated under Section 3025 of the Affordable Care Act, penalizes hospitals exhibiting excess 30-day readmissions across designated chronic conditions, including diabetes mellitus. Penalties reach 3.0% across all Medicare Part A inpatient prospective payments. For VHN, where Medicare beneficiaries represent over 40% of admissions, maximum penalty exposure represents an annual recurring loss of $8 million to $12 million.
 
 ### Clinical Realities and VHN Strategic Mandate
-Managing hospitalized diabetic patients involves severe pathophysiology. Chronic hyperglycemia drives microvascular disease (nephropathy, retinopathy, neuropathy) and macrovascular disease (coronary artery disease, stroke). Inpatient admissions destabilize glycemic control via acute stress, infection, and dietary shifts. Discharging patients on adjusted regimens without structured education triggers rapid hypoglycemic or hyperglycemic relapses.
+Managing hospitalized diabetic patients involves severe pathophysiology. Chronic hyperglycemia drives microvascular disease (nephropathy, retinopathy, neuropathy) and macrovascular disease (coronary artery disease, stroke). Inpatient admissions destabilize glycemic control via acute physiological stress, infection, and dietary shifts. Discharging patients on adjusted regimens without structured education triggers rapid hypoglycemic or hyperglycemic relapses.
 
-With historic diabetic readmissions near 18%, VHN's CMIO mandated: *"Stop reporting on what happened. Tell us why it happened, and identify who is at risk next."* Administrative claims data lags care delivery by months, identifying quality failures only after penalty assessment. VHN required an active decision support framework capable of uncovering pathophysiological drivers, standardizing clinical documentation, and providing bedside teams with automated risk stratification.
+With historic diabetic readmissions near 18%, VHN's CMIO mandated an active decision support framework capable of uncovering pathophysiological drivers, standardizing clinical documentation, and providing bedside teams with automated, prospective risk stratification.
+
+---
 
 ## 3. Clinical Data Architecture & Methodology
 
@@ -52,7 +56,7 @@ Healthcare databases routinely exhibit non-standard missing conventions. Missing
 ### Methodological Rigor: Elimination of Deceased Patients
 In readmission modeling, excluding non-surviving encounters is an imperative methodological safeguard. **A patient who expires during admission cannot physiologically be readmitted.** Retaining deceased patients introduces immortal time bias: deceased patients exhibit high acuity, complex workups, and heavy pharmacotherapy, yet their readmission status is coded as `"NO"`. Retaining them deceptively trains algorithms that high acuity protects against readmission.
 
-Using `IDs_mapping.csv`, we identified four expiration discharge codes: Code 11 (Expired), Code 19 (Expired at home - hospice), Code 20 (Expired in medical facility - hospice), and Code 21 (Expired, place unknown). Our pipeline filtered out all 1,652 deceased encounters (1.62% of raw volume), establishing a verified cohort of **100,114 surviving hospital encounters** across **70,442 unique individual patients**. Deduplication auditing confirmed zero duplicate rows.
+Using `IDs_mapping.csv`, we identified expiration discharge codes: Code 11 (Expired), Code 19 (Expired at home - hospice), and Code 20 (Expired in medical facility - hospice). Our pipeline filtered out all 1,652 deceased encounters (1.62% of raw volume), establishing a verified cohort of **100,114 surviving hospital encounters** across **70,442 unique individual patients**. Deduplication auditing confirmed zero duplicate rows.
 
 ### Phase 2: Medical Knowledge Enrichment via Web Scraping
 Primary diagnosis `diag_1` records admission etiologies as numeric ICD-9 codes (e.g., `428`, `414`), which lack clinical clarity. We engineered an automated web scraper using Python's `requests` and `BeautifulSoup` to enrich records from `http://icd9.chrisendres.com/`:
@@ -60,10 +64,12 @@ Primary diagnosis `diag_1` records admission etiologies as numeric ICD-9 codes (
 2. **Scraper Architecture & Ethics:** The scraper navigated the hierarchical ICD-9 web tree with a mandatory 1.0-second delay (`time.sleep(1)`), institutional User-Agent headers, session caching (`page_cache`), and a 3-stage retry handler.
 3. **Integration:** Scraped disease descriptions were merged into `Primary_Diagnosis_Desc`, mapping remaining codes to `"Not in Top 20"`. Top conditions proved overwhelmingly cardiovascular: Heart Failure (ICD 428; 6,735), Ischemic Heart Disease (ICD 414; 6,555), and Myocardial Infarction (ICD 410; 3,477).
 
+---
+
 ## 4. Clinical Insights & Exploratory Data Analysis
 
 ### 4.1 The Readmission Landscape & Class Imbalance
-The distribution of readmission outcomes across 100,114 surviving encounters confirms severe class imbalance: NO (Unreadmitted): 52,944 encounters (52.88%); >30 Days (Delayed Readmission): 35,813 encounters (35.77%); and <30 Days (Acute HRRP Target): 11,357 encounters (**11.34%**).
+The distribution of readmission outcomes across 100,114 surviving encounters confirms severe class imbalance: NO (Unreadmitted): 53,212 encounters (53.15%); >30 Days (Delayed Readmission): 35,545 encounters (35.50%); and <30 Days (Acute HRRP Target): 11,357 encounters (**11.34%**).
 
 ![Figure 1: The Readmission Landscape and Class Imbalance](../figures/figure1_readmission_landscape.png)
 
@@ -85,7 +91,7 @@ We classified pharmacotherapy into four mutually exclusive regimens: No Diabetes
 
 ![Figure 4: Medication Regimen Efficacy and Impact of Inpatient Medication Titration](../figures/figure4_medication_efficacy_regimens.png)
 
-As shown in Figure 4 (left panel), readmission escalates with therapeutic complexity: No Diabetes Meds (9.83%), Oral Only (10.53%), Combination (11.20%), and **Insulin Only (13.24%)**. Patients on Insulin monotherapy exhibit a **34.7% higher readmission rate** than unmedicated patients and a **25.7% increase** over oral therapy, reflecting severe pancreatic failure and microvascular pathology.
+As shown in Figure 4 (left panel), readmission escalates with therapeutic complexity: No Diabetes Meds (9.83%), Oral Only (10.53%), Combination (11.20%), and **Insulin Only (13.24%)**. Patients on Insulin monotherapy exhibit a **34.7% higher readmission rate** than unmedicated patients and a **25.7% increase** over oral therapy, reflecting advanced pancreatic failure.
 
 Figure 4 (right panel) demonstrates that inpatient dosage titration (`change == 'Ch'`) increases readmission risk from 10.80% to 11.97%-an **11% relative risk elevation**. In-hospital dosage adjustments signal glycemic instability; patients discharged before achieving metabolic equilibrium face elevated outpatient adverse events.
 
@@ -98,7 +104,9 @@ Multicollinearity evaluation confirmed low inter-variable correlations. Pearson 
 
 Figure 6 (left panel) displays length of stay distributions: readmitted patients averaged 4.77 days (IQR: 2.0-7.0) versus 4.25 days (IQR: 2.0-6.0) for non-readmitted patients, with outliers extending to 14 days.
 
-Figure 6 (right panel) exposes the largest operational risk driver: **discharge disposition**. While patients discharged home experienced a 9.27% readmission rate (60,245 encounters), patients discharged to **Skilled Nursing Facilities (SNFs)** suffered a **15.01% readmission rate** (13,953 encounters)-a **61.9% higher relative risk**. This massive divergence underscores systemic post-acute handoff failures, delayed medication administration, and fragmented physician coverage within regional nursing homes.
+Figure 6 (right panel) exposes the largest operational risk driver: **discharge disposition**. While patients discharged home experienced a 9.28% readmission rate (60,741 encounters), patients discharged to **Skilled Nursing Facilities (SNFs)** suffered a **14.66% readmission rate** (13,954 encounters)-a **58% higher relative risk**. This massive divergence underscores systemic post-acute handoff failures, delayed medication administration, and fragmented physician coverage within regional nursing homes.
+
+---
 
 ## 5. The Vitality Complexity Index (VCI) Framework
 
@@ -137,6 +145,8 @@ The VCI eliminates burdensome manual chart reviews by generating automated visua
 - **Medium Risk (Yellow Flag):** Dedicated bedside nurse discharge review, verification of active outpatient medication access, phone follow-up within 7 days.
 - **High Risk (Red Flag):** Triggers the mandatory multidisciplinary **VHN CareTransition Protocol**, mobilizing clinical pharmacy reconciliation, social work consults, and assigned nurse navigation.
 
+---
+
 ## 6. Strategic Recommendations & Implementation Roadmap
 
 Based on our empirical findings, we present three concrete recommendations to permanently mitigate readmissions and protect VHN from HRRP penalties.
@@ -150,7 +160,7 @@ Based on our empirical findings, we present three concrete recommendations to pe
 - **Action Plan:** Establish a clinical policy prohibiting discharge within 24 hours of an insulin dose titration, ensuring 24 hours of documented glycemic stability on maintenance dosing. Mandate an Inpatient Diabetes Educator consultation for every patient discharged on new or titrated insulin regimens to verify self-injection competency and hypoglycemia recognition. Provide 14-day continuous glucose monitoring (CGM) sensors at discharge for all High-VCI insulin-treated patients, connected to VHN's remote monitoring dashboard.
 
 ### Recommendation 3: Post-Acute Skilled Nursing Facility (SNF) Collaborative Network & Warm Handoffs
-- **Empirical Foundation:** Patients discharged to Skilled Nursing Facilities experience an alarming **15.01% readmission rate** (61.9% higher than home discharges). Information transfer delays between hospital discharge staff and nursing home intake teams represent VHN's most acute operational vulnerability.
+- **Empirical Foundation:** Patients discharged to Skilled Nursing Facilities experience an alarming **14.66% readmission rate** (58% higher than home discharges). Information transfer delays between hospital discharge staff and nursing home intake teams represent VHN's most acute operational vulnerability.
 - **Action Plan:** Form the "VHN Preferred SNF Quality Network," partnering with regional facilities that commit to shared EHR access and coordinated care standards. Implement a mandatory "Warm Handoff Protocol" requiring discharging hospital nurses to conduct a direct verbal telephone handoff with receiving SNF charge nurses prior to patient transit, confirming insulin orders, titration histories, and follow-up timelines. Deploy mobile VHN Nurse Practitioners to conduct weekly clinical rounds at partner SNF facilities.
 
 ---
@@ -175,6 +185,8 @@ Financial modeling demonstrates compelling returns:
 - **Net Projected Annual Benefit to VHN:** **$9,336,000 (9.8x Return on Investment)**.
 
 Deploying the Vitality Complexity Index and targeted CareTransition Protocols will safeguard clinical quality, protect vulnerable diabetic patients, and ensure VHN's long-term operational and financial resilience.
+
+---
 
 ## 7. References
 
